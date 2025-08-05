@@ -1,0 +1,65 @@
+# Simple To-Do List Application
+# Load tasks from file
+def load_tasks():
+    try:
+        with open("tasks.txt", "r") as file:
+            tasks = file.readlines()
+            return [task.strip() for task in tasks]
+    except FileNotFoundError:
+        return []
+
+# Save tasks to file
+def save_tasks(tasks):
+    with open("tasks.txt", "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
+
+# Show menu
+def show_menu():
+    print("\n--- To-Do List ---")
+    print("1. View tasks")
+    print("2. Add task")
+    print("3. Remove task")
+    print("4. Exit")
+
+# Main program
+tasks = load_tasks()
+
+while True:
+    show_menu()
+    choice = input("Choose an option (1-4): ")
+
+    if choice == "1":
+        if not tasks:
+            print("No tasks found.")
+        else:
+            print("\nYour Tasks:")
+            for i, task in enumerate(tasks):
+                print(f"{i+1}. {task}")
+
+    elif choice == "2":
+        new_task = input("Enter the task: ")
+        tasks.append(new_task)
+        print("Task added.")
+
+    elif choice == "3":
+        for i, task in enumerate(tasks):
+            print(f"{i+1}. {task}")
+        num = input("Enter the task number to remove: ")
+        if num.isdigit():
+            num = int(num)
+            if 1 <= num <= len(tasks):
+                removed = tasks.pop(num - 1)
+                print(f"Removed: {removed}")
+            else:
+                print("Invalid number.")
+        else:
+            print("Please enter a valid number.")
+
+    elif choice == "4":
+        save_tasks(tasks)
+        print("Tasks saved. Goodbye!")
+        break
+
+    else:
+        print("Invalid option. Try again.")
